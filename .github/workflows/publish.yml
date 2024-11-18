@@ -24,9 +24,15 @@ jobs:
         run: dotnet build --no-restore
       - name: Test
         run: dotnet test --no-build --verbosity normal
-      # todo - pack with current tag or if on branch with default tag as version + assembly version + publish to nuget.org
-      - name: Pack
+      # If current run is from a branch pack without versioning and don't publish
+      - name: Pack On Branch
+        if: !${{ startsWith(github.ref, 'refs/tags/') }}
+        run: |
+          dotnet pack -c Release -o output
+      # If current run is from a tag pack with tag as version and publish
+      - name: Pack On Tag
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
         run: |
           dotnet pack -c Release -o output /p:Version=1.0.0 /p:AssemblyVersion=1.0.0.0 /p:FileVersion=1.0.0.0 \
-            /p:InformationalVersion=1.0.0
+            /p:InformationalVersion=1.0.0  
 
