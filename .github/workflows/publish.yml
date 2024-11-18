@@ -42,4 +42,8 @@ jobs:
         run: |
           dotnet pack -c Release -o output /p:Version=${TAG_NAME} /p:AssemblyVersion=${TAG_NAME} \
             /p:FileVersion=${TAG_NAME} /p:InformationalVersion=${TAG_NAME}
-
+      - name: Publish To nuget.org On Tag
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push "**/*.nupkg" --api-key ${NUGET_API_KEY} --source https://api.nuget.org/v3/index.json
