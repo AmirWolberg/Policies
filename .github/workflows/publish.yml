@@ -3,7 +3,7 @@ name: Publish Package
 on:
   push: &branches
     branches:
-      - "*"
+      - "**"
   pull_request: *branches
 
 jobs:
