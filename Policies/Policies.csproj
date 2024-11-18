@@ -7,12 +7,16 @@
         <Version>0.0.0</Version>
         <PackageId>Policies</PackageId>
         <Authors>amir wolberg</Authors>
-        <Description>todo</Description>
-        <PackageLicenseFile>../LICENSE</PackageLicenseFile>
+        <RepositoryUrl>https://github.com/AmirWolberg/Policies</RepositoryUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <Description>
+            Package containing the concept of policies and all of the defaultly supported policies
+        </Description>
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="LICENSE" Pack="true" PackagePath="$(PackageLicenseFile)"/>
+        <None Include="../README.md" Pack="true" PackagePath="\"/>
+        <None Include="../LICENSE" Pack="true" PackagePath="\"/>
     </ItemGroup>
-    
 </Project>

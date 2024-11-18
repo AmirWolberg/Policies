@@ -24,3 +24,6 @@ jobs:
         run: dotnet build --no-restore
       - name: Test
         run: dotnet test --no-build --verbosity normal
+      # todo - pack with current tag or if on branch with default tag as version + assembly version + publish to nuget.org
+      - name: Pack
+        run: dotnet pack Policies.sln -o output -c Release /p:Version=1.0.0
