@@ -29,10 +29,15 @@ jobs:
         if: ${{ !startsWith(github.ref, 'refs/tags/') }}
         run: |
           dotnet pack -c Release -o output
-      # If current run is from a tag pack with tag as version and publish
+      # If current run is from a tag pack with tag name as version and publish
+      - name: Get Tag Name
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
       - name: Pack On Tag
         if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        env:
+          TAG_NAME: ${{ env.TAG_NAME }}
         run: |
-          dotnet pack -c Release -o output /p:Version=1.0.0 /p:AssemblyVersion=1.0.0.0 /p:FileVersion=1.0.0.0 \
-            /p:InformationalVersion=1.0.0  
+          dotnet pack -c Release -o output /p:Version=${TAG_NAME} /p:AssemblyVersion=${TAG_NAME} \
+            /p:FileVersion=${TAG_NAME} /p:InformationalVersion=${TAG_NAME}
 
