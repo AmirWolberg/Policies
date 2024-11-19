@@ -5,9 +5,7 @@ namespace Policies
 {
     /// <summary>
     /// Interface representing a policy.
-    /// A policy is a rule that can be applied to a recurring action to alter the way it recurs according
-    /// to the policy definition.
-    /// todo make the definition of poilicy more clear and accurate
+    /// A policy is a set of rules that dictate how and when a recurring action should be performed.
     /// </summary>
     public interface IPolicy
     {

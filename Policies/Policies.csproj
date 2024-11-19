@@ -12,7 +12,7 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <Description>
-            Package containing the concept of policies and all of the defaultly supported policies
+            A framework for managing iterative processes using customizable and chainable policies.
         </Description>
     </PropertyGroup>
 
