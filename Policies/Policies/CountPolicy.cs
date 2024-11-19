@@ -1,4 +1,4 @@
-﻿namespace Policies
+﻿namespace Policies.Policies
 {
     /// <summary>
     /// A policy for looping a given amount of times

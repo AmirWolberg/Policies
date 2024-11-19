@@ -1,13 +1,16 @@
 # Policies
 
-The `Policies` C# package is a framework for managing iterative processes using customizable and chainable policies.
-At its core is the `BasePolicy` class, which provides a foundation for implementing rules that
-govern the behavior of loops and iterations.
-A `policy` defines a set of conditions and actions for controlling when and how
-items in a sequence are processed or actions in a loop are executed.
+A .NET C# package implementing the concept of a `Policy` in C# code.
 
-Policies are designed to improve the modularity, maintainability, and clarity of your code, especially in scenarios
-involving complex control flows or dynamic conditions.
+A `policy` is a set of rules that dictate how and when a recurring action should be performed.
+
+## Overview
+
+The `Policies` package is a framework for managing iterative processes using customizable and chainable policies.
+At its core is the [BasePolicy](Policies/BasePolicy.cs) class, which provides a foundation for implementing rules that
+govern the behavior of a recurring action.
+These rules can modify the behavior of the recurrence by determining the initialization steps,
+conditions for applying the policy, criteria for completion, and any mutations that should occur during each iteration.
 
 ## Why Use Policies?
 
