@@ -4,8 +4,10 @@ namespace Policies.Tests.PoliciesTests;
 
 public class BlankPolicyTests
 {
-    [Test, TestCase(0), TestCase(1), TestCase(5)]
-    public void TestApply_CallApplyFuncWithEnumerableAndFunc_ShouldReturnEnumerableIdenticalToGivenEnumerable(
+    private static IEnumerable<int> _testCaseData = new List<int> { 0, 1, 5 };
+    
+    [Test, TestCaseSource(nameof(_testCaseData))]
+    public void TestApply_CallApplyWithEnumerableAndFunc_ShouldReturnEnumerableIdenticalToGivenEnumerable(
         int numberOfItemsInEnumerable)
     {
         // Arrange
@@ -21,8 +23,8 @@ public class BlankPolicyTests
         CollectionAssert.AreEqual(enumerable, returnedEnumerable);
     }
     
-    [Test, TestCase(0), TestCase(1), TestCase(5)]
-    public void TestApply_CallApplyFuncWithEnumerableAndAction_ShouldCallActionWithAllItemsInGivenEnumerable(
+    [Test, TestCaseSource(nameof(_testCaseData))]
+    public void TestApply_CallApplyWithEnumerableAndAction_ShouldCallActionWithAllItemsInGivenEnumerable(
         int numberOfItemsInEnumerable)
     {
         // Arrange
