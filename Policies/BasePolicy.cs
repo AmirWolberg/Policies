@@ -111,7 +111,6 @@ namespace Policies
             {
                 while(!ShouldApply()){}
                 var output = func();
-                if (output == null) break; // Func returning null is a sign to break iteration - todo 
                 Mutate();
                 yield return output;
                 if (Completed(output)) break;
