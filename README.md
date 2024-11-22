@@ -48,8 +48,17 @@ For example, the following code chains the [CountPolicy](Policies/Policies/Count
 5 times or for 10 seconds, whichever condition is met first.
 
 ```csharp
-var chainedPolicy = new CountPolicy(5)
-        .Extend(new TimeoutPolicy(TimeSpan.FromSeconds(10)));
+var chainedPolicy = new CountPolicy(3)
+        .Extend(new TimeoutPolicy(TimeSpan.FromSeconds(2)));
+chainedPolicy.Apply(() =>
+{
+    Console.WriteLine("Processing...");
+    System.Threading.Thread.Sleep(1000); // Simulate work
+});
+
+// Output:
+// Processing...
+// Processing...
 ```
 
 ## Supported Policies
