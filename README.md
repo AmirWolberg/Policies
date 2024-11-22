@@ -2,8 +2,8 @@
 
 A .NET C# package implementing the concept of a `Policy` in C# code.
 
-A `policy` is a set of rules that dictate how and when a recurring action should be performed.
-Policies can be chained together in order to apply multiple rules to the same recurring action.
+A `Policy` is a mechanism for applying conditional logic and looping behavior to recurring actions or data processing
+workflows. Policies can be chained together, creating reusable and composable building blocks for complex workflows.
 
 ## Overview
 
@@ -27,13 +27,18 @@ The Policies package is ideal for:
 
 ## How To Use A Policy
 
-To use a policy initialize it and invoke one its `Apply()` function overrides.
+To use a policy initialize it and invoke one of its `Apply()` function overrides.
 
-For example, the following code initializes and uses the [BlankPolicy](Policies/Policies/BlankPolicy.cs)
+For example, the following code initializes and uses the [CountPolicy](Policies/Policies/CountPolicy.cs)
 
 ```csharp
-var policy = new BlankPolicy();
-policy.Apply(...);
+var policy = new CountPolicy(3);
+policy.Apply(() => Console.WriteLine("Running policy iteration!"));
+
+// Output:
+// Running policy iteration!
+// Running policy iteration!
+// Running policy iteration!
 ```
 
 In order to chain multiple policies together the `Extend()` function can be used.
@@ -45,7 +50,6 @@ For example, the following code chains the [CountPolicy](Policies/Policies/Count
 ```csharp
 var chainedPolicy = new CountPolicy(5)
         .Extend(new TimeoutPolicy(TimeSpan.FromSeconds(10)));
-chainedPolicy.Apply(...);
 ```
 
 ## Supported Policies
@@ -54,3 +58,16 @@ All policies natively supported in this package can be found under the namespace
 [Policies.Policies](Policies/Policies).
 
 ## How To Create Your Own Policy
+
+1. inherit from [BasePolicy](Policies/BasePolicy.cs):
+
+```csharp
+public class MyCustomPolicy : BasePolicy { }
+```
+
+2. Override Key Methods:
+
+* `Initialize()`: For setup logic.
+* `ShouldApply()` / `ShouldApply<TItem>(TItem item)`: Decide whether the loop should proceed or wait.
+* `Mutate()`: For modifying state during each iteration.
+* `Completed()` / `Completed<TOut>(TOut output)`: For termination logic.
