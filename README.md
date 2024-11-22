@@ -3,6 +3,7 @@
 A .NET C# package implementing the concept of a `Policy` in C# code.
 
 A `policy` is a set of rules that dictate how and when a recurring action should be performed.
+Policies can be chained together in order to apply multiple rules to the same recurring action.
 
 ## Overview
 
@@ -25,6 +26,27 @@ The Policies package is ideal for:
 * **Modular Design**: Extendable policies make it easy to reuse and compose behavior for different scenarios.
 
 ## How To Use A Policy
+
+To use a policy initialize it and invoke one its `Apply()` function overrides.
+
+For example, the following code initializes and uses the [BlankPolicy](Policies/Policies/BlankPolicy.cs)
+
+```csharp
+var policy = new BlankPolicy();
+policy.Apply(...);
+```
+
+In order to chain multiple policies together the `Extend()` function can be used.
+
+For example, the following code chains the [CountPolicy](Policies/Policies/CountPolicy.cs) with the
+[TimeoutPolicy](Policies/Policies/TimeoutPolicy.cs) to create a policy that performs a recurring action
+5 times or for 10 seconds, whichever condition is met first.
+
+```csharp
+var chainedPolicy = new CountPolicy(5)
+        .Extend(new TimeoutPolicy(TimeSpan.FromSeconds(10)));
+policy.Apply(...);
+```
 
 ## Supported Policies
 
