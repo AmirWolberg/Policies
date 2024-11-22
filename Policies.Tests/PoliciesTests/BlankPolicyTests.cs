@@ -7,7 +7,7 @@ public class BlankPolicyTests
     private static IEnumerable<int> _testCaseData = new List<int> { 0, 1, 5 };
     
     [Test, TestCaseSource(nameof(_testCaseData))]
-    public void TestApply_CallApplyWithEnumerableAndFunc_ShouldReturnEnumerableIdenticalToGivenEnumerable(
+    public void TestApplyWithEnumerableAndFunc_CallApply_ShouldReturnEnumerableIdenticalToGivenEnumerable(
         int numberOfItemsInEnumerable)
     {
         // Arrange
@@ -24,7 +24,7 @@ public class BlankPolicyTests
     }
     
     [Test, TestCaseSource(nameof(_testCaseData))]
-    public void TestApply_CallApplyWithEnumerableAndAction_ShouldCallActionWithAllItemsInGivenEnumerable(
+    public void TestApplyWithEnumerableAndAction_CallApply_ShouldCallActionWithAllItemsInGivenEnumerable(
         int numberOfItemsInEnumerable)
     {
         // Arrange

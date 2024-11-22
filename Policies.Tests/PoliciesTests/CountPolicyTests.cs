@@ -7,7 +7,7 @@ public class CountPolicyTests
     private static IEnumerable<ulong> _testCaseData = new List<ulong> { 0, 1, 5 };
     
     [Test, TestCaseSource(nameof(_testCaseData))]
-    public void TestApply_CallApplyWithEnumerableAndFunc_ShouldReturnEnumerableWithAmountElements(ulong amount)
+    public void TestApplyWithEnumerableAndFunc_CallApply_ShouldReturnEnumerableWithAmountElements(ulong amount)
     {
         // Arrange
         var enumerable = new List<int>();
@@ -23,7 +23,7 @@ public class CountPolicyTests
     }
     
     [Test, TestCaseSource(nameof(_testCaseData))]
-    public void TestApply_CallApplyWithEnumerableAndAction_ShouldCallActionAmountTimes(ulong amount)
+    public void TestApplyWithEnumerableAndAction_CallApply_ShouldCallActionAmountTimes(ulong amount)
     {
         // Arrange
         var enumerable = new List<int>();
@@ -43,7 +43,7 @@ public class CountPolicyTests
     }
     
     [Test, TestCaseSource(nameof(_testCaseData))]
-    public void TestApply_CallApplyWithFunc_ShouldReturnEnumerableWithAmountElements(ulong amount)
+    public void TestApplyWithFunc_CallApply_ShouldReturnEnumerableWithAmountElements(ulong amount)
     {
         // Arrange
         var countPolicy = new CountPolicy(amount);
@@ -56,7 +56,7 @@ public class CountPolicyTests
     }
     
     [Test, TestCaseSource(nameof(_testCaseData))]
-    public void TestApply_CallApplyWithAction_ShouldCallActionAmountTimes(ulong amount)
+    public void TestApplyWithAction_CallApply_ShouldCallActionAmountTimes(ulong amount)
     {
         // Arrange
         var numberOfActionCalls = 0;

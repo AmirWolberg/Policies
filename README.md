@@ -4,8 +4,6 @@ A .NET C# package implementing the concept of a `Policy` in C# code.
 
 A `policy` is a set of rules that dictate how and when a recurring action should be performed.
 
-[TOC]
-
 ## Overview
 
 The `Policies` package is a framework for managing iterative processes using customizable and chainable policies.

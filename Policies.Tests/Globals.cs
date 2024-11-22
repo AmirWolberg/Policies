@@ -6,7 +6,7 @@ namespace Policies.Tests;
 
 public static class Globals
 {
-    public static ILogger Logger = new SerilogLoggerFactory(
+    public static readonly ILogger Logger = new SerilogLoggerFactory(
         new LoggerConfiguration().MinimumLevel.Debug()
             .WriteTo.NUnitOutput()
             .CreateLogger()).CreateLogger("TestLogger");
