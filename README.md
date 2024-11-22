@@ -45,7 +45,7 @@ For example, the following code chains the [CountPolicy](Policies/Policies/Count
 ```csharp
 var chainedPolicy = new CountPolicy(5)
         .Extend(new TimeoutPolicy(TimeSpan.FromSeconds(10)));
-policy.Apply(...);
+chainedPolicy.Apply(...);
 ```
 
 ## Supported Policies
