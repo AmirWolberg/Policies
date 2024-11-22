@@ -50,4 +50,7 @@ chainedPolicy.Apply(...);
 
 ## Supported Policies
 
+All policies natively supported in this package can be found under the namespace
+[Policies.Policies](Policies/Policies).
+
 ## How To Create Your Own Policy
