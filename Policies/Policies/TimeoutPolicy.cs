@@ -41,12 +41,11 @@ namespace Policies.Policies
         
         protected override void Initialize()
         {
-            base.Initialize();
             _timer.Restart();
         }
         
-        protected override bool Completed() => _timeout <= _timer.Elapsed || base.Completed();
+        protected override bool Completed() => _timeout <= _timer.Elapsed;
 
-        protected override bool Completed<TOut>(TOut output) => _timeout <= _timer.Elapsed || base.Completed(output);
+        protected override bool Completed<TOut>(TOut output) => Completed();
     }
 }

@@ -27,6 +27,8 @@ The Policies package is ideal for:
 
 ## How To Use A Policy
 
+### Basic Usage
+
 To use a policy initialize it and invoke one of its `Apply()` function overrides.
 
 For example, the following code initializes and uses the [CountPolicy](Policies/Policies/CountPolicy.cs)
@@ -40,6 +42,13 @@ policy.Apply(() => Console.WriteLine("Running policy iteration!"));
 // Running policy iteration!
 // Running policy iteration!
 ```
+
+### Policy Chaining
+
+When chaining policies, you are essentially combining multiple policies to create a new composite policy.
+This composite policy evaluates the conditional logic of all the individual policies in the chain.
+Each policy contributes to the overall behavior of the chain, allowing for flexible and modular decision-making.
+For example, whether to complete the policy or not depends on whether any of the chained policies have completed.
 
 In order to chain multiple policies together the `Extend()` function can be used.
 

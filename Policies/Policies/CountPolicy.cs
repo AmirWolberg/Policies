@@ -19,18 +19,16 @@
         
         protected override void Initialize()
         {
-            base.Initialize();
             _count = 0;
         }
         
         protected override void Mutate()
         {
             _count++;
-            base.Mutate();
         }
 
-        protected override bool Completed() => _amount <= _count || base.Completed();
+        protected override bool Completed() => _amount <= _count;
 
-        protected override bool Completed<TOut>(TOut output) => _amount <= _count || base.Completed(output);
+        protected override bool Completed<TOut>(TOut output) => Completed();
     }
 }

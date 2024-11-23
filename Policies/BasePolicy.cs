@@ -10,122 +10,152 @@ namespace Policies
     /// </summary>
     public abstract class BasePolicy : IPolicy
     {
-        private BasePolicy? _basePolicy;
+        private BasePolicy? _chainedPolicy;
 
         /// <summary>
         /// Adds a policy to the current policy chain
         /// </summary>
-        /// <param name="basePolicy">The <see cref="BasePolicy"/> to add to the policy chain</param>
+        /// <param name="chainedPolicy">The <see cref="BasePolicy"/> to add to the policy chain</param>
         /// <returns>The policy chain created by the function</returns>
-        public BasePolicy? Extend(BasePolicy? basePolicy)
+        public BasePolicy? Extend(BasePolicy? chainedPolicy)
         {
-            if (_basePolicy != null) return _basePolicy.Extend(basePolicy);
-            _basePolicy = basePolicy;
+            if (_chainedPolicy != null) return _chainedPolicy.Extend(chainedPolicy);
+            _chainedPolicy = chainedPolicy;
             return this;
         }
 
         /// <summary>
         /// Initializes policy before starting the policy's loop.
-        /// Triggers function in chained policies 
         /// </summary>
-        protected virtual void Initialize()
+        protected virtual void Initialize() { }
+        
+        /// <summary>
+        /// Invokes <see cref="Initialize"/> in <see cref="_chainedPolicy"/> and in current policy.
+        /// </summary>
+        protected void ChainedInitialize()
         {
-            _basePolicy?.Initialize();
+            _chainedPolicy?.Initialize();
+            Initialize();
         }
 
         /// <summary>
         /// Places Policy on hold every time it loops until true is returned.
-        /// Uses function in chained policies to determine result
         /// </summary>
         /// <param name="item"> Current item being iterated over by the policy in the policy loop </param>
         /// <returns> Whether the policy should stop waiting and continue performing
         /// another loop iteration (true) or keep waiting (false) </returns>
-        protected virtual bool ShouldApply<TItem>(TItem item) => _basePolicy == null || _basePolicy.ShouldApply(item);
+        protected virtual bool ShouldApply<TItem>(TItem item) => true;
 
         /// <summary>
+        /// Invokes <see cref="ShouldApply"/> in <see cref="_chainedPolicy"/> and in current policy and if either is
+        /// true continues loop iteration, if both are false keeps waiting.
+        /// </summary>
+        protected bool ChainedShouldApply<TItem>(TItem item) => ShouldApply(item) || (_chainedPolicy?.ShouldApply(item) ?? false);
+        
+        /// <summary>
         /// Places Policy on hold every time it loops until true is returned.
-        /// Uses function in chained policies to determine result
         /// </summary>
         /// <returns> Whether the policy should stop waiting and continue performing
         /// another loop iteration (true) or keep waiting (false) </returns>
-        protected virtual bool ShouldApply() => _basePolicy == null || _basePolicy.ShouldApply();
+        protected virtual bool ShouldApply() => true;
+        
+        /// <summary>
+        /// Invokes <see cref="ShouldApply"/> in <see cref="_chainedPolicy"/> and in current policy and if either is
+        /// true continues loop iteration, if both are false keeps waiting.
+        /// </summary>
+        protected bool ChainedShouldApply() => ShouldApply() || (_chainedPolicy?.ShouldApply() ?? false);
 
         /// <summary>
         /// Checks whether to terminate the policy loop every time it loops.
-        /// Uses function in chained policies to determine result
         /// </summary>
         /// <param name="output"> The output of the func from the current policy loop iteration </param>
         /// <returns> Whether the policy has completed (true) or not (false) </returns>
-        protected virtual bool Completed<TOut>(TOut output) => _basePolicy != null && _basePolicy.Completed(output);
+        protected virtual bool Completed<TOut>(TOut output) => false;
 
+        /// <summary>
+        /// Invokes <see cref="Completed"/> in <see cref="_chainedPolicy"/> and in current policy and if either is
+        /// true continues terminates the policy loop, if both are false keeps looping.
+        /// </summary>
+        protected bool ChainedCompleted<TOut>(TOut output) => Completed(output) || (_chainedPolicy?.Completed(output) ?? false);
+        
         /// <summary>
         /// Checks whether to terminate the policy loop every time it loops.
-        /// Uses function in chained policies to determine result
         /// </summary>
         /// <returns> Whether the policy has completed (true) or not (false) </returns>
-        protected virtual bool Completed() => _basePolicy != null && _basePolicy.Completed();
-
+        protected virtual bool Completed() => false;
+        
+        /// <summary>
+        /// Invokes <see cref="Completed"/> in <see cref="_chainedPolicy"/> and in current policy and if either is
+        /// true continues terminates the policy loop, if both are false keeps looping.
+        /// </summary>
+        protected bool ChainedCompleted() => Completed() || (_chainedPolicy?.Completed() ?? false);
+        
         /// <summary>
         /// Performs a mutation in the policy every time it loops.
-        /// Triggers function in chained policies
         /// </summary>
-        protected virtual void Mutate()
+        protected virtual void Mutate() { }
+        
+        /// <summary>
+        /// Invokes <see cref="Mutate"/> in <see cref="_chainedPolicy"/> and in current policy.
+        /// </summary>
+        protected void ChainedMutate()
         {
-            _basePolicy?.Mutate();
+            _chainedPolicy?.Mutate();
+            Mutate();
         }
 
         /// <inheritdoc />
         public IEnumerable<TOut> Apply<TItem, TOut>(IEnumerable<TItem> items, Func<TItem, TOut> func)
         {
-            Initialize();
+            ChainedInitialize();
             foreach (var item in items)
             {
-                if (Completed()) break;
-                while(!ShouldApply(item)){}
+                if (ChainedCompleted()) break;
+                while(!ChainedShouldApply(item)){}
                 var output = func(item);
-                Mutate();
+                ChainedMutate();
                 yield return output;
-                if (Completed(output)) break;
+                if (ChainedCompleted(output)) break;
             }
         }
 
         /// <inheritdoc />
         public void Apply<TItem>(IEnumerable<TItem> items, Action<TItem> action)
         {
-            Initialize();
+            ChainedInitialize();
             foreach (var item in items)
             {
-                if (Completed()) break;
-                while(!ShouldApply(item)){}
+                if (ChainedCompleted()) break;
+                while(!ChainedShouldApply(item)){}
                 action(item);
-                Mutate();
-                if (Completed()) break;
+                ChainedMutate();
+                if (ChainedCompleted()) break;
             }
         }
 
         /// <inheritdoc />
         public IEnumerable<TOut> Apply<TOut>(Func<TOut> func)
         {
-            Initialize();
-            while (!Completed())
+            ChainedInitialize();
+            while (!ChainedCompleted())
             {
-                while(!ShouldApply()){}
+                while(!ChainedShouldApply()){}
                 var output = func();
-                Mutate();
+                ChainedMutate();
                 yield return output;
-                if (Completed(output)) break;
+                if (ChainedCompleted(output)) break;
             }
         }
 
         /// <inheritdoc />
         public void Apply(Action action)
         {
-            Initialize();
-            while (!Completed())
+            ChainedInitialize();
+            while (!ChainedCompleted())
             {
-                while(!ShouldApply()){}
+                while(!ChainedShouldApply()){}
                 action();
-                Mutate();
+                ChainedMutate();
             }
         }
     }
