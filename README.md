@@ -45,7 +45,7 @@ In order to chain multiple policies together the `Extend()` function can be used
 
 For example, the following code chains the [CountPolicy](Policies/Policies/CountPolicy.cs) with the
 [TimeoutPolicy](Policies/Policies/TimeoutPolicy.cs) to create a policy that performs a recurring action
-5 times or for 10 seconds, whichever condition is met first.
+3 times or for 2 seconds, whichever condition is met first.
 
 ```csharp
 var chainedPolicy = new CountPolicy(3)
